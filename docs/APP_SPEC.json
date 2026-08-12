@@ -1,0 +1,69 @@
+{
+  "name": "Wildfern Salon",
+  "purpose": "Appointment booking for a hair salon: customers pick a service and staff member, see real availability from staff schedules, book with contact details, and cancel via a private link. Admins manage services, staff, weekly availability, and appointments.",
+  "actors": [
+    "Guest customer (browses services/staff, books, cancels via token link)",
+    "Salon admin (manages services, staff, weekly availability, appointments)"
+  ],
+  "entities": [
+    {
+      "name": "Service",
+      "relationships": [
+        "has many appointments",
+        "has many staff members through appointments",
+        "duration in minutes and price in cents"
+      ]
+    },
+    {
+      "name": "StaffMember",
+      "relationships": [
+        "has many schedule entries",
+        "has many appointments",
+        "serves many services through appointments"
+      ]
+    },
+    {
+      "name": "ScheduleEntry",
+      "relationships": [
+        "belongs to staff member",
+        "one recurring weekly availability window: day of week + start/end time"
+      ]
+    },
+    {
+      "name": "Appointment",
+      "relationships": [
+        "belongs to service",
+        "belongs to staff member",
+        "start/end datetimes",
+        "customer name/email/phone",
+        "status booked|cancelled",
+        "secret cancel token"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Book an appointment",
+      "description": "Guest picks a service, then a staff member, picks an available time slot generated from that staff member's weekly schedule minus overlaps and past times, enters contact details, and gets a confirmation with a private cancel link"
+    },
+    {
+      "name": "Cancel an appointment",
+      "description": "Guest opens their private cancel link and confirms; slot becomes bookable again"
+    },
+    {
+      "name": "Manage services",
+      "description": "Admin creates/edits/deactivates services with name, duration, price"
+    },
+    {
+      "name": "Manage staff and availability",
+      "description": "Admin adds staff members and their recurring weekly availability windows"
+    },
+    {
+      "name": "Manage appointments",
+      "description": "Admin views appointments by status/date and cancels on behalf of customers"
+    }
+  ],
+  "modules": [],
+  "integrations": [],
+  "seed_demo": "4 services (Precision Cut 45min $65, Balayage 150min $220, Signature Blowout 30min $45, Deep Conditioning Ritual 30min $40); 3 staff members (Mara, June, Ellis) each with a full weekly availability schedule; one upcoming booked appointment and one cancelled appointment so the admin view demonstrates both states"
+}
